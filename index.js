@@ -2,11 +2,11 @@ import { ethers } from "./ethers-5.6.esm.min.js"
 import { abi, contractAddress } from "./constants.js"
 
 const connectButton = document.getElementById("connectButton")
-const fundButton = document.getElementById("fundButton")
-const balanceButton = document.getElementById("balanceButton")
+const makeBidButton = document.getElementById("makeBidButton")
+const getLastMaxBidButton = document.getElementById("getLastMaxBid")
 connectButton.onclick = connect
-fundButton.onclick = fund
-balanceButton.onclick = getBalance
+makeBidButton.onclick = makeBid
+getLastMaxBidButton.onclick = getLastMaxBid
 
 async function connect() {
   if (typeof window.ethereum !== "undefined") {
@@ -23,15 +23,15 @@ async function connect() {
   }
 }
 
-async function fund() {
+async function makeBid() {
   const ethAmount = document.getElementById("ethAmount").value
-  console.log(`Funding with ${ethAmount}...`)
+  console.log(`Bidding with ${ethAmount}...`)
   if (typeof window.ethereum !== "undefined") {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
     try {
-      const transactionResponse = await contract.fund({
+      const transactionResponse = await contract.makeBid({
         value: ethers.utils.parseEther(ethAmount),
       })
       await listenForTransactionMine(transactionResponse, provider)
@@ -43,11 +43,11 @@ async function fund() {
   }
 }
 
-async function getBalance() {
+async function getLastMaxBid() {
   if (typeof window.ethereum !== "undefined") {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     try {
-      const balance = await provider.getBalance(contractAddress)
+      const balance = await provider.getLastMaxBid(contractAddress)
       console.log(ethers.utils.formatEther(balance))
     } catch (error) {
       console.log(error)
