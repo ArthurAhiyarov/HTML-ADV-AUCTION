@@ -9,6 +9,7 @@ makeBidButton.onclick = makeBid
 getLastMaxBidButton.onclick = getLastMaxBid
 
 async function connect() {
+  let account
   if (typeof window.ethereum !== "undefined") {
     try {
       await ethereum.request({ method: "eth_requestAccounts" })
@@ -17,6 +18,8 @@ async function connect() {
     }
     connectButton.innerHTML = "Connected"
     const accounts = await ethereum.request({ method: "eth_accounts" })
+    account = accounts[0]
+    document.getElementById("accountArea").innerHTML = account
     console.log(accounts)
   } else {
     connectButton.innerHTML = "Please install MetaMask"
@@ -48,6 +51,8 @@ async function getLastMaxBid() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     try {
       const balance = await provider.getLastMaxBid(contractAddress)
+      document.getElementById("contractArea").innerHTML =
+        ethers.utils.formatEther(balance)
       console.log(ethers.utils.formatEther(balance))
     } catch (error) {
       console.log(error)
