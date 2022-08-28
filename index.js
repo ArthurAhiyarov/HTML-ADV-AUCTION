@@ -72,4 +72,8 @@ function listenForTransactionMine(transactionResponse, provider) {
       resolve()
     })
   })
+
+function downloadText(userText) {
+  
+}
 }
